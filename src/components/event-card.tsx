@@ -17,7 +17,7 @@ export default function EventCard({ event }: EventCardProps) {
   return (
     <Link
       href={`/event/${event.slug}`}
-      className="relative flex flex-col flex-1 basis-80 h-[380px] max-w-[500px] bg-white/[3%] rounded-xl overflow-hidden hover:scale-105 active:scale-[1.02] transition"
+      className="relative flex flex-col flex-1 basis-80 h-[380px] max-w-[500px] bg-white/[3%] rounded-xl overflow-hidden state-effects"
     >
       <section>
         <Image
@@ -25,7 +25,7 @@ export default function EventCard({ event }: EventCardProps) {
           alt={event.name}
           width={500}
           height={280}
-          className="h-[60%] object-fit"
+          className="h-[60%] object-cover"
         />
         <div className="flex flex-col flex-1 justify-center items-center">
           <h2 className="text-2xl font-semibold">{event.name}</h2>

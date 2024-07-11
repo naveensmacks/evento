@@ -15,7 +15,7 @@ export default async function EventPage({ params }: EventPageProps) {
   const event: EventoEvent = await response.json();
   return (
     <main>
-      <section className="relative h-[361px] overflow-hidden flex items-center justify-center">
+      <section className="relative overflow-hidden flex items-center justify-center py-8 lg:py-14">
         <Image
           className="object-cover z-0 blur-3xl"
           src={event.imageUrl}
@@ -25,38 +25,62 @@ export default async function EventPage({ params }: EventPageProps) {
           sizes="(max-width: 1280px) 100vw, 1280px"
           priority
         />
-        <div className="absolute top-16 z-1 flex gap-x-6 ">
+        <div className="relative z-1 flex flex-col gap-6 lg:gap-16 lg:flex-row">
           <Image
-            className="rounded-md border border-white/50"
+            className="rounded-xl border-2 border-white/50 w-full lg:w-[300px]"
             src={event.imageUrl}
             alt={event.name}
             width={300}
             height={201}
           />
-          <div className="flex flex-col justify-between relative">
-            {/*display date in day name comma name of the Month and then day number of month 
-             for eg: Friday, July 12*/}
-            <div className="flex flex-col">
-              <p className="text-white/50 text-sm">
-                {new Date(event.date).toLocaleDateString("en-US", {
-                  weekday: "long",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </p>
-              <H1 className="mb-1 text-2xl lg:text-5xl">{event.name}</H1>
-              <p className="text-white/50 text-sm">
-                Organized by{" "}
-                <span className="italic">{event.organizerName}</span>
-              </p>
-            </div>
+          <div className="flex flex-col">
+            <p className="text-white/75 text-xl">
+              {/*display date in day name comma name of the Month and 
+                  then day number of month for eg: Friday, July 12*/}
+              {new Date(event.date).toLocaleDateString("en-US", {
+                weekday: "long",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+            <H1 className="mb-2 mt-1 whitespace-nowrap lg:text-5xl">
+              {event.name}
+            </H1>
+            <p className="text-white/75 text-xl whitespace-nowrap">
+              Organized by <span className="italic">{event.organizerName}</span>
+            </p>
 
-            <button className="bg-white/20 text-white rounded-md px-5 py-2 w-full">
+            <button className="bg-white/20 text-lg capitalize bg-blur rounded-md mt-5 lg:mt-auto sm:w-full py-2 border-white/10  border-2 state-effects">
               Get Tickets
             </button>
           </div>
         </div>
       </section>
+      <div className="min-h-[75vh] text-center px-5 py-16">
+        <Section>
+          <Sectionheading>About this event</Sectionheading>
+          <SectionContent>{event.description}</SectionContent>
+        </Section>
+        <Section>
+          <Sectionheading>Location</Sectionheading>
+          <SectionContent>{event.location}</SectionContent>
+        </Section>
+      </div>
     </main>
+  );
+}
+
+function Section({ children }: { children: React.ReactNode }) {
+  return <section className="mb-12">{children}</section>;
+}
+function Sectionheading({ children }: { children: React.ReactNode }) {
+  return <h3 className="text-2xl mb-8">{children}</h3>;
+}
+
+function SectionContent({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="max-w-4xl mx-auto text-lg leading-8 text-white/75">
+      {children}
+    </p>
   );
 }
