@@ -1,12 +1,25 @@
-import { EventoEvent } from "@/lib/types";
+"use client";
+import { EventoEvent } from "@prisma/client";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useRef } from "react";
 
 type EventCardProps = {
   event: EventoEvent;
 };
+
+const MotionLink = motion(Link);
+
 export default function EventCard({ event }: EventCardProps) {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["0 1", "1.5 1"],
+  });
+  const scaleProgress = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
+  const opacityProgress = useTransform(scrollYProgress, [0, 1], [0.3, 1]);
+
   const date = new Date(event.date);
   //turn date into day of month with leading zero
   const day = date.toLocaleString("en-US", { day: "2-digit" });
@@ -15,11 +28,15 @@ export default function EventCard({ event }: EventCardProps) {
     .toUpperCase();
 
   return (
-    <Link
+    <MotionLink
+      ref={ref}
       href={`/event/${event.slug}`}
-      className="relative flex flex-col flex-1 basis-80 h-[380px] max-w-[500px] bg-white/[3%] rounded-xl overflow-hidden state-effects"
+      className="flex-1 basis-80 h-[380px] max-w-[500px]"
+      //@ts-ignore
+      style={{ scale: scaleProgress, opacity: opacityProgress }}
+      initial={{ scale: 0.8, opacity: 0 }}
     >
-      <section>
+      <section className="h-full w-full relative flex flex-col bg-white/[3%] rounded-xl overflow-hidden state-effects">
         <Image
           src={event.imageUrl}
           alt={event.name}
@@ -37,6 +54,6 @@ export default function EventCard({ event }: EventCardProps) {
           <p className="text-xs text-accent">{month}</p>
         </section>
       </section>
-    </Link>
+    </MotionLink>
   );
 }
