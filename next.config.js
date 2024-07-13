@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  //output: "export", for static site generation(no server side rendering)
   images: {
     remotePatterns: [
       {
